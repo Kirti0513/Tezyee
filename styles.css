@@ -11,8 +11,54 @@ body {
     padding: 0px;
     margin: 0px;
 }
+/* Light Mode (7 AM - 7 PM) */
+.light-mode {
+    background-color: white;
+    color: black;
+}
 
+.light-mode .content,
+.light-mode .header,
+.light-mode .footer {
+    background-color: white;
+    color: black;
+}
 
+.light-mode .dish {
+    background-color: #f9f9f9;
+    border-color: #ccc;
+}
+
+.light-mode .dish-description {
+    color: #333;
+}
+
+/* Dark Mode (7 PM - 7 AM) */
+.dark-mode {
+    background-color: black;
+    color: white;
+}
+
+.dark-mode .content,
+.dark-mode .header,
+.dark-mode .footer
+.dark-mode .category-nav {
+    background-color: #111;
+    color: white;
+}
+
+.dark-mode .dish {
+    background-color: #222;
+    border-color: #ff4d4d;
+}
+
+.dark-mode .dish-description {
+    color: wheat;
+}
+
+.dark-mode .category-nav{
+    background-color: #454242;
+}
 .container {
     flex: 1;
     width: auto;
@@ -27,6 +73,14 @@ body {
 }
 
 
+.lazy-img {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.lazy-img.fade-in {
+    opacity: 1;
+}
 
 
 .menu-section {
@@ -58,7 +112,7 @@ body {
 }
 
 .dish {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 20px;
@@ -131,7 +185,7 @@ body {
 .dish-description {
     font-size: 0.9rem;
     line-height: 1.5rem;
-    color: #555;
+    /* color: #555; */
     /* margin-top: 10px; */
 
 }
@@ -140,7 +194,7 @@ body {
     position: sticky;
     bottom: 0;
     text-align: center;
-    padding: 10px;
+    padding-top: 10px;
     background-color: #a5c7ff;
 }
 
@@ -150,16 +204,22 @@ body {
     max-height: 50px;
     justify-content: space-around;
     align-items: center;
+    /* padding-top: 10px; */
     /* gap: 20px; */
     flex-wrap: wrap;
 }
-
+.link,.footer-text{
+    color: #555;
+    padding: 0px;
+    text-decoration: none;
+}
 /* Button styling */
 #toggle-nav,
 .cta-button,
-.placeorder {
+.placeorder,
+.location{
     padding: 0px 12px;
-    font-size: 16px;
+    font-size: 1.0rem;
     cursor: pointer;
     border-radius: 5px;
     text-align: center;
@@ -193,7 +253,7 @@ body {
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 0.9rem;
     cursor: pointer;
     border-radius: 5px;
     text-align: center;
@@ -205,6 +265,7 @@ body {
     display: none;
     margin-top: 15px;
     text-align: center;
+
 }
 
 #menu-nav a {
@@ -212,7 +273,8 @@ body {
     text-decoration: none;
     color: black;
     padding: 5px 0;
-    font-size: 18px;
+    font-size: 0.9rem;
+    background-color: #a5c7ff;
 }
 
 /* Adjust WhatsApp and Call Us when menu is open */
@@ -281,19 +343,13 @@ body {
 
 .dish img {
     width: 100%;
-    /* Makes image responsive */
     max-width: 160px;
-    /* Prevents it from getting too large */
     height: auto;
-    /* Maintains aspect ratio */
     border-radius: 10px;
-    /* Rounded corners */
     display: block;
     height: 140px;
     margin: 10px auto;
-    /* Centers image */
-    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-    /* Soft shadow for better look */
+    /* box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .tag {
@@ -328,14 +384,14 @@ body {
     background-color: #fff;
 }
 
-.btn,
-.count-btn {
+.btn, 
+.dish-counter {
     background-color: yellow;
-    /* Same background */
-    color: rgb(7, 0, 0);
-    /* Text color */
-    border: none;
-    padding: 10px 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: black;
+    border: 2px solid gold;
+    padding: 6px 15px;
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
@@ -344,41 +400,23 @@ body {
     align-items: center;
     justify-content: center;
     transition: background 0.3s;
+   
 }
 
-.btn:hover,
-.count-btn:hover {
-    background-color: yellow;
+/* Dish Counter Wrapper */
+.dish-counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 15px;
 }
-
-.count-btn {
-    width: 40px;
-    height: 40px;
-    font-weight: bold;
+.minus,
+.plus,.count
+{
+margin: 0px;
+padding: 0px 6px;
+font-weight: bold;
 }
-
-.count {
-    font-size: 18px;
-    margin: 0 10px;
-    min-width: 30px;
-    text-align: center;
-}
-
-.place-order-btn {
-    background-color: #4CAF50;
-    /* Green */
-    color: white;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-.place-order-btn:hover {
-    background-color: #45a049;
-}
-
 .dish-footer {
     display: flex;
     justify-content: space-between;
@@ -392,15 +430,16 @@ body {
     max-height: 50px;
     background-color: #a5c7ff;
     text-align: center;
-    /* padding: 5px 0px; */
+    padding-top: 5px;
+    padding-bottom: 15px;
     z-index: 1000;
     /* Keeps it above other content */
 }
 
 .restaurant-name {
-    font-size: 24px;
+    font-size: 1.6rem;
     font-weight: bold;
-    max-height: 25px;
+    /* max-height: 20px; */
 }
 
 .restaurant-details {
@@ -410,15 +449,13 @@ body {
 
 .category-nav {
     position: sticky;
-    top: 50px;
-    /* Adjust to match .restaurant-info height */
+    top: 70px;
     background-color: #fff;
     padding: 3px 0px;
     display: flex;
     justify-content: center;
     gap: 10px;
     z-index: 999;
-    /* Below .restaurant-info but above content */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -445,10 +482,10 @@ body {
         /* padding: 5px; */
     }
 
-    #toggle-nav,
+
     .cta-button,
     .placeorder {
-        padding: 2px 12px;
+        padding: 0px 10px;
     }
 
     #toggle-nav {
@@ -462,7 +499,7 @@ body {
     }
 
     .restaurant-name {
-        font-size: 20px;
+        font-size: 1.5rem;
         min-height: 20px;
     }
 
@@ -476,13 +513,13 @@ body {
     }
 
     .dish img {
-        width: 120px;
-        height: 100px;
+        width: 140px;
+        height: 120px;
     }
 
     .category-nav {
         position: sticky;
-        top: 50px;
+        top: 70px;
         /* Adjust to match .restaurant-info height */
         background-color: #fff;
         padding: 3px 0px;

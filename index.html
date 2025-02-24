@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPTIONS Restro Menu</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
     <!-- Font Awesome 6 (Latest) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <!-- <link rel="stylesheet" href="allmin.css"> -->
 </head>
 
 <body>
@@ -50,8 +50,12 @@
                 <button id="toggle-nav">Menu</button>
                 <div class="placeorder" onclick="shareOnWhatsApp('')" aria-label="Share on WhatsApp">
                     Send Order</div>
+                <div class="location" onclick="sendLocationOnWhatsApp()" aria-label="Share on WhatsApp">Send Location
+                </div>
                 <a class="cta-button" href="#">Call</a>
             </div>
+            <span class="footer-text">Teyzee Menus! <a class="link" href="https://www.ariaprohotels.com/qr-code-menu/">-
+                    by AriaProHotels.com</a></span>
 
             <!-- This part appears when menu is shown -->
             <div id="menu-container">
@@ -129,8 +133,6 @@
                 });
             }
         }
-
-
         let selectedDishes = {};
         let whatsappNumber = "";
         let upiId = "";
@@ -147,29 +149,40 @@
         function selectDish(dishName, buttonElement) {
             if (!selectedDishes[dishName]) {
                 selectedDishes[dishName] = 1;
-                updateButton(buttonElement, dishName);
+                toggleCounter(buttonElement, dishName);
             }
         }
 
-        function updateButton(buttonElement, dishName) {
-            buttonElement.innerHTML = `
+        function toggleCounter(buttonElement, dishName) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "dish-counter";
+            wrapper.innerHTML = `
         <button class="minus" onclick="updateCount('${dishName}', -1, this)">-</button>
         <span class="count">${selectedDishes[dishName]}</span>
         <button class="plus" onclick="updateCount('${dishName}', 1, this)">+</button>
     `;
-            buttonElement.classList.add("active");
+
+            buttonElement.style.display = "none";
+            buttonElement.parentNode.appendChild(wrapper);
         }
 
         function updateCount(dishName, change, buttonElement) {
-            if (selectedDishes[dishName] + change > 0) {
-                selectedDishes[dishName] += change;
-            } else {
+            selectedDishes[dishName] = (selectedDishes[dishName] || 0) + change;
+
+            if (selectedDishes[dishName] <= 0) {
                 delete selectedDishes[dishName];
-                buttonElement.parentElement.innerHTML = `<button class="btn" onclick="selectDish('${dishName}', this)">Add On Order</button>`;
-                return;
+
+                const counterElement = buttonElement.parentNode;
+                const addButton = counterElement.parentNode.querySelector(".btn");
+
+                counterElement.remove();
+                addButton.style.display = "inline-block";
+            } else {
+                buttonElement.parentNode.querySelector(".count").textContent = selectedDishes[dishName];
             }
-            buttonElement.parentElement.querySelector(".count").innerText = selectedDishes[dishName];
         }
+
+
         // Update Order List & Show Total Price
         function updateOrderList() {
             const orderList = document.getElementById("order-list");
@@ -202,7 +215,19 @@
             return total;
         }
 
-        // Share Order on WhatsApp with dynamic number & UPI ID
+        // Generate UPI Link
+        function generateUPILink(amount) {
+            const isGooglePay = true; // Set this flag if you want to generate the Google Pay link
+            let upiLink = "";
+
+            if (isGooglePay) {
+                upiLink = `upi://pay?pa=${upiId}&pn=%20&tr=%20&am=${amount}&cu=INR`;
+            } else {
+                upiLink = `upi://pay?pa=${upiId}&am=${amount}&cu=INR`;
+            }
+            return upiLink;
+        }
+
         function shareOnWhatsApp() {
             if (Object.keys(selectedDishes).length === 0) {
                 alert("Please select at least one dish.");
@@ -219,17 +244,26 @@
                 .join("\n");
 
             let orderTotal = calculateTotal();
-
-            const whatsappMessage = `Order Details:\n${orderSummary}\n\nPay Total Rs ${orderTotal} to Restaurant on UPI ID ${upiId}`;
+            const upiLink = generateUPILink(orderTotal);
+            const whatsappMessage = `Order Details:\n${orderSummary}\n\nPay Total Rs ${orderTotal} to Restaurant on UPI ID ${upiLink}`;
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
             window.open(whatsappURL, "_blank");
+    }       
+    function updateTheme() {
+    const currentHour = new Date().getHours();
+    const isLightMode = currentHour >= 7 && currentHour < 19; // 7 AM to 7 PM
 
-            // Reset after ordering
-            selectedDishes = {};
-            document.querySelectorAll(".btn").forEach(btn => btn.innerHTML = "Add On Order");
-            updateOrderList();
-        }
+    document.body.classList.toggle("light-mode", isLightMode);
+    document.body.classList.toggle("dark-mode", !isLightMode);
+
+    document.querySelectorAll(".content, .header, .footer, .dish").forEach(element => {
+        element.classList.toggle("dark-content", !isLightMode);
+        element.classList.toggle("light-content", isLightMode);
+    });
+}
+
+updateTheme();
+setInterval(updateTheme, 60000);
     </script>
 </body>
 
